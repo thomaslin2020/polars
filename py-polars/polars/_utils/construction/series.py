@@ -314,6 +314,7 @@ def _construct_series_with_fallbacks(
     """Construct Series, with fallbacks for basic type mismatch (eg: bool/int)."""
     while True:
         try:
+            print(name, values, strict)
             return constructor(name, values, strict)
         except TypeError as exc:
             str_exc = str(exc)

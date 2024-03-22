@@ -454,8 +454,8 @@ fn any_values_to_decimal(
         match av {
             AnyValue::Decimal(v, s) if *s == scale => builder.append_value(*v),
             AnyValue::Null => builder.append_null(),
-            av => match av.cast(&target_dtype) {
-                AnyValue::Decimal(i, _) => builder.append_value(i),
+            av => match av.strict_cast(&target_dtype) {
+                Ok(AnyValue::Decimal(i, _)) => builder.append_value(i),
                 _ => {
                     if strict {
                         return Err(invalid_value_error(&target_dtype, av));

@@ -618,9 +618,10 @@ impl<'a> AnyValue<'a> {
                 AnyValue::Decimal(converted, scale)
             },
             (AnyValue::Decimal(value, scale_av), DataType::Decimal(_, scale)) => {
-                let scale_av = *scale_av;
-                let scale = scale.unwrap_or(scale_av);
-                let Some(scale_diff) = scale.checked_sub(scale_av) else {
+                let Some(scale) = scale else {
+                    return Ok(self.clone());
+                };
+                let Some(scale_diff) = scale.checked_sub(*scale_av) else {
                     // TODO: Allow lossy conversion?
                     polars_bail!(
                         ComputeError:

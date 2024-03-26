@@ -607,7 +607,7 @@ impl<'a> AnyValue<'a> {
             (av, DataType::Decimal(prec, scale)) if av.is_integer() => {
                 let value = av.try_extract::<i128>().unwrap();
                 let scale = scale.unwrap_or(0);
-                let factor = 10_i128.pow(scale as _); // Conversion is safe, max value is 38.
+                let factor = 10_i128.pow(scale as _); // Conversion to u32 is safe, max value is 38.
                 let Some(converted) = value.checked_mul(factor) else {
                     polars_bail!(ComputeError: "overflow while converting to decimal scale {}", scale)
                 };
